@@ -9,7 +9,7 @@
 ---
 
 A minimal, portable environment variable manager.
-No systemd. No daemons. Just one config file and `eval "$(genv export)"`.
+No systemd. No daemons. 
 
 * Stores vars in `~/.config/genv/env`
 * Works in any POSIX shell (`bash`, `zsh`, `dash`) + `fish`
