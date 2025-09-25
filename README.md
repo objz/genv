@@ -17,6 +17,18 @@ No systemd. No daemons.
 
 ---
 
+## Install
+
+On Arch Linux, `genv` is available on the **AUR** as [`genv-git`](https://aur.archlinux.org/packages/genv-git):
+
+```bash
+paru -S genv-git
+# or
+yay -S genv-git
+````
+
+---
+
 ## Build
 
 ```bash
