@@ -1,6 +1,6 @@
 # Maintainer: objz <me@objz.dev>
 pkgname=envm
-pkgver=0.2.0
+pkgver=0.3.0
 pkgrel=1
 pkgdesc="Portable environment variable manager"
 arch=('x86_64' 'aarch64')
