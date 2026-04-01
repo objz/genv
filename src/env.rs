@@ -3,7 +3,7 @@ use std::fs;
 use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
 
-use color_eyre::eyre::{Result, eyre};
+use color_eyre::eyre::{eyre, Result};
 
 use crate::logging as log;
 
@@ -14,7 +14,7 @@ pub fn default_env_file(custom: Option<&Path>) -> Result<PathBuf> {
         return Ok(c.to_path_buf());
     }
     let mut p = home::home_dir().ok_or_else(|| eyre!("cannot resolve home directory"))?;
-    p.push(".config/genv");
+    p.push(".config/envm");
     Ok(p.join("env"))
 }
 
@@ -56,7 +56,7 @@ pub fn save_env_map(path: &Path, map: &EnvMap) -> Result<()> {
         fs::create_dir_all(parent)?;
     }
     let mut f = fs::File::create(path)?;
-    writeln!(f, "# Managed by genv")?;
+    writeln!(f, "# Managed by envm")?;
     for (k, v) in map {
         writeln!(f, "{k}={v}")?;
     }

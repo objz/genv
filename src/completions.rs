@@ -3,7 +3,7 @@ use std::io::{self, Write};
 pub fn generate_bash(out: &mut impl Write) -> io::Result<()> {
     write!(
         out,
-        r#"_genv() {{
+        r#"_envm() {{
     local cur prev
     cur="${{COMP_WORDS[COMP_CWORD]}}"
     prev="${{COMP_WORDS[COMP_CWORD-1]}}"
@@ -17,7 +17,7 @@ pub fn generate_bash(out: &mut impl Write) -> io::Result<()> {
         edit|remove)
             if [[ ${{COMP_CWORD}} -eq 2 ]]; then
                 local keys
-                keys=$(grep '=' "$HOME/.config/genv/env" 2>/dev/null | cut -d= -f1)
+                keys=$(grep '=' "$HOME/.config/envm/env" 2>/dev/null | cut -d= -f1)
                 COMPREPLY=($(compgen -W "${{keys}}" -- "${{cur}}"))
             fi
             ;;
@@ -35,7 +35,7 @@ pub fn generate_bash(out: &mut impl Write) -> io::Result<()> {
             ;;
     esac
 }}
-complete -F _genv genv
+complete -F _envm envm
 "#
     )
 }
@@ -43,15 +43,15 @@ complete -F _genv genv
 pub fn generate_zsh(out: &mut impl Write) -> io::Result<()> {
     write!(
         out,
-        r#"#compdef genv
+        r#"#compdef envm
 
-_genv_keys() {{
+_envm_keys() {{
     local -a keys
-    keys=(${{(f)"$(grep '=' "$HOME/.config/genv/env" 2>/dev/null | cut -d= -f1)"}})
+    keys=(${{(f)"$(grep '=' "$HOME/.config/envm/env" 2>/dev/null | cut -d= -f1)"}})
     compadd -a keys
 }}
 
-_genv() {{
+_envm() {{
     local -a commands
     commands=(
         'add:Add a new variable'
@@ -72,7 +72,7 @@ _genv() {{
 
     case $state in
         cmd)
-            _describe -t commands 'genv command' commands
+            _describe -t commands 'envm command' commands
             ;;
         args)
             case $words[1] in
@@ -80,10 +80,10 @@ _genv() {{
                     _arguments '1:key:' '2:value:'
                     ;;
                 edit)
-                    _arguments '1:key:_genv_keys' '2:value:'
+                    _arguments '1:key:_envm_keys' '2:value:'
                     ;;
                 remove)
-                    _arguments '1:key:_genv_keys'
+                    _arguments '1:key:_envm_keys'
                     ;;
                 export)
                     _arguments '--shell=[Shell style]:shell:(posix fish)'
@@ -96,7 +96,7 @@ _genv() {{
     esac
 }}
 
-_genv "$@"
+_envm "$@"
 "#
     )
 }
@@ -104,25 +104,25 @@ _genv "$@"
 pub fn generate_fish(out: &mut impl Write) -> io::Result<()> {
     write!(
         out,
-        r#"complete -c genv -e
+        r#"complete -c envm -e
 
-complete -c genv -n '__fish_use_subcommand' -l file -d 'Override the managed env file' -r -F
-complete -c genv -n '__fish_use_subcommand' -l help -d 'Print help'
-complete -c genv -n '__fish_use_subcommand' -l version -d 'Print version'
+complete -c envm -n '__fish_use_subcommand' -l file -d 'Override the managed env file' -r -F
+complete -c envm -n '__fish_use_subcommand' -l help -d 'Print help'
+complete -c envm -n '__fish_use_subcommand' -l version -d 'Print version'
 
-complete -c genv -n '__fish_use_subcommand' -a add -d 'Add a new variable'
-complete -c genv -n '__fish_use_subcommand' -a edit -d 'Edit an existing variable'
-complete -c genv -n '__fish_use_subcommand' -a remove -d 'Remove a variable'
-complete -c genv -n '__fish_use_subcommand' -a list -d 'List variables'
-complete -c genv -n '__fish_use_subcommand' -a export -d 'Print exports for the current shell'
-complete -c genv -n '__fish_use_subcommand' -a completions -d 'Generate shell completions'
-complete -c genv -n '__fish_use_subcommand' -a help -d 'Print help information'
+complete -c envm -n '__fish_use_subcommand' -a add -d 'Add a new variable'
+complete -c envm -n '__fish_use_subcommand' -a edit -d 'Edit an existing variable'
+complete -c envm -n '__fish_use_subcommand' -a remove -d 'Remove a variable'
+complete -c envm -n '__fish_use_subcommand' -a list -d 'List variables'
+complete -c envm -n '__fish_use_subcommand' -a export -d 'Print exports for the current shell'
+complete -c envm -n '__fish_use_subcommand' -a completions -d 'Generate shell completions'
+complete -c envm -n '__fish_use_subcommand' -a help -d 'Print help information'
 
-complete -c genv -n '__fish_seen_subcommand_from edit remove' -xa '(grep "=" "$HOME/.config/genv/env" 2>/dev/null | string split -f1 =)'
+complete -c envm -n '__fish_seen_subcommand_from edit remove' -xa '(grep "=" "$HOME/.config/envm/env" 2>/dev/null | string split -f1 =)'
 
-complete -c genv -n '__fish_seen_subcommand_from export' -l shell -xa 'posix fish'
+complete -c envm -n '__fish_seen_subcommand_from export' -l shell -xa 'posix fish'
 
-complete -c genv -n '__fish_seen_subcommand_from completions' -xa 'bash zsh fish'
+complete -c envm -n '__fish_seen_subcommand_from completions' -xa 'bash zsh fish'
 "#
     )
 }

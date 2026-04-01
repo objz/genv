@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use crate::completions;
 use crate::env::{
-    EnvMap, default_env_file, load_env_map, quote_fish, quote_posix, save_env_map, validate_key,
+    default_env_file, load_env_map, quote_fish, quote_posix, save_env_map, validate_key, EnvMap,
 };
 use crate::logging as log;
 use std::io::{self, Write};
@@ -15,7 +15,7 @@ use std::io::{self, Write};
     about = "Manage global environment variables (portable, no systemd)"
 )]
 struct Cli {
-    /// Override the managed env file (default: ~/.config/genv/env)
+    /// Override the managed env file (default: ~/.config/envm/env)
     #[arg(long)]
     file: Option<PathBuf>,
 
@@ -37,7 +37,7 @@ enum CommandKind {
     /// List variables managed by this file
     List,
 
-    /// Print exports for the current shell. Use with: eval "$(genv export)"
+    /// Print exports for the current shell. Use with: eval "$(envm export)"
     Export {
         /// Force a shell style
         #[arg(long, value_enum)]
